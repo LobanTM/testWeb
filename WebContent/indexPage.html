@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Family tree</title>
+</head>
+<body>
+
+	<form action = "tree" method="post" enctype="multipart/form-data">
+		param1 <input type="text" name="firstParametr" value="/home/loban/Projects/LDAP/projectSpase/testweb/resource/dataFile.csv">
+		<br>
+		param2 <input type="file" name="nameFile" id="input" value="/home/loban/Projects/LDAP/projectSpase/testweb/resource/dataFile.csv">
+		<input type="submit" value="SEND">
+	</form>	
+	<br>
+	
+	<!-- 
+	<canvas id="canvas" width="1000" height="250"
+            style="background-color:#fff; border:1px solid #ccc;">
+            Ваш браузер не поддерживает Canvas
+    </canvas>
+	<script type="text/javascript">
+
+	   function draw() {
+  			var canvas = document.getElementById('canvas');
+  			if (canvas.getContext) {
+   				var ctx = canvas.getContext('2d');
+   			
+    			ctx.beginPath();
+   				// здесь инструкции по созданию фигур
+    			ctx.moveTo(30, 20);
+    			ctx.lineTo(100, 80);
+    			ctx.lineTo(150, 30);
+    			ctx.closePath();
+    			ctx.stroke();    			
+    			
+    			ctx.font = "28px Georgia";
+    			ctx.fillStyle = "fuchsia";
+    			ctx.fillText("Я и текст могу рисовать!", 100, 200);
+    			
+    			ctx.beginPath();
+    			ctx.moveTo(240, 90);
+    			ctx.strokeStyle = "RED";
+    			ctx.arc(240, 90, 50, 0, Math.PI/2, true);
+    			ctx.closePath();
+    			ctx.stroke();
+  			}
+		}
+	   draw();
+	   </script>
+		 -->
+</body>
+</html>
