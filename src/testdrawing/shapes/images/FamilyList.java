@@ -10,8 +10,10 @@ import java.awt.Insets;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Line2D;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -27,64 +29,60 @@ import testdrawing.shapes.model.TextImage;
 import testdrawing.shapes.tools.GraphicsPanel;
 
 public class FamilyList {
-	private List<Person> data = new ArrayList<>();
-	private String nameFileData = "";
+	private List<Person> data = new ArrayList<>();	
 	private List<Object> listObject = new ArrayList<>();
-	private GetFromFile dataFile = new GetFromFile();
+	private GetFromFile dataFile = new GetFromFile();	
+	private InputStream inputStream;
+	private int countPersons;
 	
-	public FamilyList(String nameFileData) {
+	public int getCountPersons() {
+		return countPersons;
+	}
+
+	public void setCountPersons(int countPersons) {
+		this.countPersons = countPersons;
+	}
+
+	public FamilyList(InputStream inputStream) {
 		super();
-		this.nameFileData = nameFileData;
+		this.inputStream = inputStream;
 	}
 
 	public List<Object> listOfShapes() throws IOException{
-		List <Object>listObject1 = new ArrayList<>();
-		/* data.add(new Person(1950, 0, "FirstName", "bisque"));		 
-		 data.add(new Person(1951, 2000, "FirstName", "fuchsia"));
-		 data.add(new Person(1930, 0, "FirstName", "turquoise"));
-		 data.add(new Person(1901, 2010, "FirstName", "crimson"));
-		 data.add(new Person(1916, 1990, "FirstName", "tomato"));
-		 data.add(new Person(2006, 0, "FirstName", "magenta"));
-		 data.add(new Person(1920, 2000, "FirstName", "violet"));
-		 data.add(new Person(1930, 1990, "FirstName", "purple"));
-		 data.add(new Person(1940, 1994, "FirstName", "pink"));
-		 data.add(new Person(1950, 2000, "FirstName", "green"));
-		 data.add(new Person(1960, 1994, "FirstName", "olive"));
-		 data.add(new Person(1970, 1990, "FirstName", "lime"));
-		 data.add(new Person(1970, 0, "FirstName", "chocolate"));
-		 data.add(new Person(1970, 1990, "FirstName", "yellow"));
-		 data.add(new Person(1970, 1990, "FirstName", "khaki"));
-		 data.add(new Person(2020, 0, "FirstName", "BLUE"));
-		*/ 
-		//dataFile.setNameFile("/home/loban/Projects/LDAP/projectSpase/testweb/resource/dataFileExample.csv");
-		dataFile.setNameFile(nameFileData);
+			List <Object>listObject1 = new ArrayList<>();        
+        
+			dataFile.setInputStream(inputStream);
 		
-		 data = dataFile.getData();
+		 	data = dataFile.getData();
+		 	countPersons = data.size();
+		 	
+		 	int beginEpohe = 1600;
+		 	List birthday = new ArrayList();
+		 	for (Person p : data) {
+		 		birthday.add((int)p.getBegin());
+		 	}
+		 	Collections.sort(birthday);
+		 	beginEpohe = (((int)birthday.get(0)/100)*100);
+		 	
+		 	System.out.println("!!!"+beginEpohe);
+		 	
+        	int endEpohe = 2000; 
 		 		 
 		 	//lines.forEach(l->list.add(l));
-	        Line h = new Line(0,100,1000,100);
-	        listObject1.add(h);
-	        int year=new Date().getYear()+ 1900;
-	        int beginEpohe = 1700;
-	        int endEpohe = 2000;	        
+	        
+	        int year=new Date().getYear()+ 1900;     	
+	        
 	        int def = (int)(endEpohe-beginEpohe)/100;
+	        Line h = new Line(0,100,def*100*3,100);
+	        listObject1.add(h);
+	        
 	        
 	        for (int j=0; j<def+1;j++) {
 	        	int a= (int)( j*3*100);
 	        	System.out.println(a); 
-		        Line v = new Line(a, 0,a,1000);
+		        Line v = new Line(a, 0,a,50 + 30 * countPersons);
 		        listObject1.add(v);
 	        }
-	        
-	        //int a= ( 1800 - 1850);
-	        //Line v = new Line(a, 0,a,1000);
-	        //a= 5*( 1900 - 1850);
-	        //Line v1 = new Line(a, 0,a,1000);
-	        //a= 5*( 2000 - 1850);
-	        //Line v2 = new Line(a, 0,a,1000);
-	        //a= 5*( 2020 - 1850);
-	        //Line v3 = new Line(a, 0,a,1000);
-	        
 	        int i=0;
 	        for (Person p : data) {
 	        	
