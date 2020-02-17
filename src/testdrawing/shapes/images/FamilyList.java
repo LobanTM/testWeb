@@ -30,86 +30,96 @@ import testdrawing.shapes.tools.GraphicsPanel;
 
 public class FamilyList {
 	private List<Person> data = new ArrayList<>();	
-	private List<Object> listObject = new ArrayList<>();
+	private List<Object> listOfShapes = new ArrayList<>();
 	private GetFromFile dataFile = new GetFromFile();	
 	private InputStream inputStream;
 	private int countPersons;
+	private int beginEpohe = 1600;
+	private int endEpohe = 2000; 	
 	
+	public FamilyList(InputStream inputStream) throws IOException {
+		super();		
+		this.inputStream = inputStream;
+		dataFile.setInputStream(inputStream);
+		
+		this.data = dataFile.getData();
+		this.countPersons = data.size();
+		
+		List birthday = new ArrayList();
+	 	for (Person p : data) {
+	 		birthday.add((int)p.getBegin());
+	 	}
+	 	Collections.sort(birthday);
+	 	this.beginEpohe = (((int)birthday.get(0)/100)*100);	 	
+	 	
+	}
+
 	public int getCountPersons() {
 		return countPersons;
 	}
-
-	public void setCountPersons(int countPersons) {
-		this.countPersons = countPersons;
+	
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;		
 	}
 
-	public FamilyList(InputStream inputStream) {
-		super();
-		this.inputStream = inputStream;
+	public int getBeginEpohe() {
+		return beginEpohe;
 	}
 
-	public List<Object> listOfShapes() throws IOException{
-			List <Object>listObject1 = new ArrayList<>();        
-        
-			dataFile.setInputStream(inputStream);
-		
-		 	data = dataFile.getData();
-		 	countPersons = data.size();
-		 	
-		 	int beginEpohe = 1600;
-		 	List birthday = new ArrayList();
-		 	for (Person p : data) {
-		 		birthday.add((int)p.getBegin());
-		 	}
-		 	Collections.sort(birthday);
-		 	beginEpohe = (((int)birthday.get(0)/100)*100);
-		 	
-		 	System.out.println("!!!"+beginEpohe);
-		 	
-        	int endEpohe = 2000; 
-		 		 
-		 	//lines.forEach(l->list.add(l));
-	        
+	public List<Person> getData() {
+		return data;
+	}
+
+	public void setData(List<Person> data) {
+		this.data = data;
+	}
+
+	public int getEndEpohe() {
+		return endEpohe;
+	}
+	
+	public List<Object> getListOfShapes() throws IOException{
+				        
 	        int year=new Date().getYear()+ 1900;     	
+	        int rightKoef = 300;
+	        
+	        int fromTop = 40;  //расстояние от верха до первого прямоугольника
 	        
 	        int def = (int)(endEpohe-beginEpohe)/100;
-	        Line h = new Line(0,100,def*100*3,100);
-	        listObject1.add(h);
-	        
+	        Line h = new Line(0,100,def*rightKoef,100);
+	        listOfShapes.add(h);	        
 	        
 	        for (int j=0; j<def+1;j++) {
-	        	int a= (int)( j*3*100);
-	        	System.out.println(a); 
-		        Line v = new Line(a, 0,a,50 + 30 * countPersons);
-		        listObject1.add(v);
+	        	int a= (int)( j*rightKoef);
+	        	//System.out.println(a); 
+		        //Line v = ;
+		        listOfShapes.add(new Line(a, 0,a,50+30*countPersons));
 	        }
 	        int i=0;
-	        for (Person p : data) {
-	        	
+	        for (Person p : data) {	        	
 	        	int nowDay = p.getEnd();
 	        	if (nowDay==0) {nowDay=year;}
-	        	double height = 20 ; //
-	        	double width = 3*(nowDay-p.getBegin());
-	        	double y = 20+i*30+30;
+	        	double height = 20 ; 								//вьісота прямоугольника
+	        	double width = 3*(nowDay-p.getBegin());				//длина прямоугольника
+	        	double y = fromTop+i*(height+5);
 	        	double x = 3*(p.getBegin()-beginEpohe);
 	        	
 	        	Rectangle r = new Rectangle(x,y,width,height, p.getColor());
+	        	listOfShapes.add(r);
 	        	
-	        	System.out.println(nowDay);       
-	        	String n= String.valueOf(nowDay);
-	        	if (nowDay==(new Date().getYear()+ 1900)) {n = "";}
-	        	TextImage t1 = new TextImage(String.valueOf(p.getBegin()), x-20, y );
-	        	TextImage t2 = new TextImage(n, (width+x), ( y) );
-	        	TextImage tn = new TextImage(String.valueOf(p.getName()), (x+10), ( y+15) );
+	        	//System.out.println(nowDay);       
+	        	String nameEnd= String.valueOf(nowDay);
+	        	if (nowDay==(new Date().getYear()+ 1900)) {nameEnd = "";}
+	        	TextImage textBegin = new TextImage(String.valueOf(p.getBegin()), x-20, y );
+	        	TextImage textEnd = new TextImage(nameEnd, (width+x), ( y) );
+	        	TextImage textName = new TextImage(String.valueOf(p.getName()), (x+10), ( y+15) );	        	
 	        	
-	        	listObject1.add(r);
-	        	listObject1.add(t1);
-	        	listObject1.add(t2);
-	        	listObject1.add(tn);
+	        	listOfShapes.add(textBegin);
+	        	listOfShapes.add(textEnd);
+	        	listOfShapes.add(textName);
 	        	i++;
-	        }	       
-    			 
-		return listObject1;
+	        }    			 
+		return listOfShapes;
 	}
 	
 	public void drawArc() {
@@ -203,7 +213,7 @@ public class FamilyList {
 	        					new Insets(2,2,2,2),0,0));
 	        frame.setVisible(true);
 	        
-	        listObject.add(list);
+	        listOfShapes.add(list);
 	}
 
 	public void drawLine() {

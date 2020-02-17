@@ -1,15 +1,9 @@
 package com.loban;
 
-import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
+import java.awt.geom.Arc2D;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -20,37 +14,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
-import org.apache.tomcat.util.http.fileupload.RequestContext;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
-
 import testdrawing.shapes.images.FamilyList;
 import testdrawing.shapes.images.FamilyListArc;
-import testdrawing.shapes.model.ArcFamily;
 import testdrawing.shapes.model.Line;
-import testdrawing.shapes.model.Person;
 import testdrawing.shapes.model.Rectangle;
 import testdrawing.shapes.model.TextImage;
 
 /**
- * Servlet implementation class tree
+ * Servlet implementation class treeArc
  */
-@WebServlet(value="/tree")					//  localhost:8080/testweb/tree
+@WebServlet("/treeArc")
 @MultipartConfig(fileSizeThreshold = 1024*1024,
-						maxFileSize = 1024*1024*5,
-						maxRequestSize = 1024*1024*5*5)
-public class tree extends HttpServlet {
+				maxFileSize = 1024*1024*5,
+				maxRequestSize = 1024*1024*5*5)
+public class treeArc extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+    
+		private FamilyListArc familyListArc;
 	
-	private FamilyList familyList;
-	private FamilyListArc familyListArc;
-
     /**
-     * Default constructor. 
+     * @see HttpServlet#HttpServlet()
      */
-    public tree() {
+    public treeArc() {
+        super();
         // TODO Auto-generated constructor stub
     }
 
@@ -58,11 +44,8 @@ public class tree extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		int wightDiv = 1500; 
-		int heigthDiv = 1000;	
-		
-		String typeForm = request.getParameter("share");
+		int heigthDiv = 1000;		
 		
 		String firstParam = request.getParameter("firstParametr");				
 		//папка для загрузки на сервер по умолчанию установлена:
@@ -81,20 +64,14 @@ public class tree extends HttpServlet {
 		//===test=====
 		//String data = "1;name1;1950;2000;;green;\n2;name2;1960;2020;;red;\n2;name2;1960;2020;;red;\n2;name2;1960;2020;;red;";		
 		//inputStream = new ByteArrayInputStream(data.toString().getBytes());	
-		List<Object> list = new ArrayList<Object>();
-		if (typeForm.indexOf("rec")>-1) {
-			familyList = new FamilyList(inputStream);//"/home/loban/Projects/LDAP/projectSpase/testweb/resource/dataFileExample.csv");//			
-			list = familyList.getListOfShapes();//массив фигур для рисования
-			heigthDiv = 50 + 30 * familyList.getCountPersons();
-		}
 		
-		if (typeForm.indexOf("arc")>-1) {
-			familyListArc = new FamilyListArc(inputStream);
-			list = familyListArc.getListOfShapes();//массив фигур для рисования
-			heigthDiv = 50 + 80 * familyListArc.getCountPersons();		
-		}
 		
-		System.out.println("%%% "+ familyListArc.getCountPersons());
+		//familyList = new FamilyList(inputStream);//"/home/loban/Projects/LDAP/projectSpase/testweb/resource/dataFileExample.csv");//
+		
+		familyListArc = new FamilyListArc(inputStream);
+		
+		List<Object> list = familyListArc.getListOfShapes();//массив фигур для рисования
+		heigthDiv = 50 + 30 * familyListArc.getCountPersons();
 		System.out.println("%%% "+ heigthDiv);
 		
 		response.setContentType("text/html; charset=utf-8");
@@ -106,7 +83,7 @@ public class tree extends HttpServlet {
 				"  <title>Тег DIV</title>\n" + 
 				"  <style type=\"text/css\">\n" + 
 				"   .block1 { \n" + 
-				"    width: 300px; \n" + 
+				"    width: 500px; \n" + 
 				"    background: #ccc;\n" + 
 				"    padding: 5px;\n" + 
 				"    padding-right: 20px; \n" + 
@@ -116,7 +93,7 @@ public class tree extends HttpServlet {
 				"   .block2 { \n" + 
 				"    width: "+wightDiv+"px; \n" + 
 				"    background: #fff; \n" + 
-				"    padding: 10px; \n" + 
+				"    padding: 5px; \n" + 
 				"    border: solid 1px black; \n" + 
 				"    float: left; \n" + 
 				"    position: relative; \n" + 
@@ -129,10 +106,8 @@ public class tree extends HttpServlet {
 				
 		String div1 = "<div class=\"block1\">";		
 		
-		String form ="<form action = \"tree\"  method=\"post\" upload=\"true\" enctype=\"multipart/form-data\">\n" + 
-				"		param1 <input type=\"file\" name=\"fileData\" id=\"input\" value=\"\">\n" + "<br/>\n" + 
-						"		<input type=\"radio\" name=\"share\" value=\"rec\"> прямокутник\n" + 
-						"		<input type=\"radio\" name=\"share\" value=\"arc\" checked> коло\n" + 								
+		String form ="<form action = \"treeArc\"  method=\"post\" upload=\"true\" enctype=\"multipart/form-data\">\n" + 
+				"		param1 <input type=\"file\" name=\"fileData\" id=\"input\" value=\"\">\n" + 
 				"		<input type=\"submit\" value=\"SEND\">\n" + 
 				"	</form>	";	
 		String div1End = "</div>";
@@ -199,6 +174,21 @@ public class tree extends HttpServlet {
 				response.getWriter().println("ctx.closePath();");
 				response.getWriter().println("ctx.stroke();");				
 			}
+			
+			if (s instanceof Arc2D) {
+				Arc2D arc=(Arc2D) s;		
+				//System.out.println( rectangle.getClass() );
+				//response.getWriter().println("ctx.beginPath();");				
+				//response.getWriter().println("ctx.moveTo("+rectangle.getX()+", "+rectangle.getY()+");");
+				//response.getWriter().println("ctx.strokeStyle = \""+rectangle.getColor()+"\";");
+				
+				response.getWriter().println("ctx.arc(240, 90, 50, 0, Math.PI/2, true);");
+				//response.getWriter().println("ctx.lineWidth = \"5\";");
+				//response.getWriter().println("ctx.rect("+rectangle.getX()+", "+rectangle.getY()+","+rectangle.getWidth()+","+rectangle.getHeight()+");");
+				//response.getWriter().println("ctx.closePath();");
+				response.getWriter().println("ctx.stroke();");				
+			}
+			
 			if (s instanceof TextImage) {			
 				TextImage t = (TextImage) s;
 				response.getWriter().println("ctx.strokeStyle = \"BLACK\";");
@@ -206,35 +196,12 @@ public class tree extends HttpServlet {
 				response.getWriter().println("ctx.fillText(\""+t.getName()+"\", "+t.getX()+", "+t.getY()+");");
 				//response.getWriter().println("ctx.stroke();");		
 			}
-			if (s instanceof ArcFamily) {			
-				ArcFamily arc = (ArcFamily) s;
-				response.getWriter().println("ctx.strokeStyle = \""+arc.getColor()+"\";");
-				//response.getWriter().println("ctx.strokeStyle = \"rgb("+(arc.getRadius()-150)+","+(arc.getRadius()-200)+",100)\";");
-				response.getWriter().println("ctx.beginPath();");
-				//System.out.println( "x="+arc.getX()+" y="+arc.getY()+" radius="+arc.getRadius()+" start="+arc.getStartAngle()+" end="+arc.getEndAngle());
-				response.getWriter().println("ctx.arc("+(arc.getX()+0)+", "+(arc.getY()+0)+","			//центр
-													+ arc.getRadius()+"," 				//радиус
-													+ arc.getStartAngle()+","+arc.getEndAngle()+", "		//начало и конец дуги в радианах
-													+ "false);"); //true - против часовой стрелки
-				response.getWriter().println("ctx.stroke();");
-			}
-			
-		}	
-		/*
-		response.getWriter().println("ctx.strokeStyle = \"rgb(255,165,0)\";"); //#FFA500 //способьі задания цвета
-		response.getWriter().println("ctx.setLineDash([5,7]);");	//пунктир
-		response.getWriter().println("ctx.beginPath();");	
-		response.getWriter().println("ctx.arc(300, 300,"			//центр
-											+ " 100," 				//радиус
-											+ " (-10*Math.PI/180), Math.PI/2, "		//начало и конец дуги в радианах
-											+ "false);"); //true - против часовой стрелки
-		response.getWriter().println("ctx.stroke();");
-		*/
+		}		
+		
 		response.getWriter().println(varStringEnd);		
 		response.getWriter().println(scriptEnd);		
 		response.getWriter().println(div2End);		
 		response.getWriter().println(footer);
-		
 	}
 
 	/**

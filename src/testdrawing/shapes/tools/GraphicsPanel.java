@@ -89,7 +89,7 @@ public class GraphicsPanel extends JPanel{
 				System.out.println("width: "+ a.getWidth());
 				System.out.println("start: "+ a.getAngleStart()+" / end: "+a.getAngleExtent());				
 			}
-			if (s instanceof ArcFamily) {	
+			/*if (s instanceof ArcFamily) {	
 				//circle = (Circle) s;
 				ArcFamily a = (ArcFamily)s;
 				g2.setPaint(a.getColor());
@@ -99,6 +99,7 @@ public class GraphicsPanel extends JPanel{
 				System.out.println( a.toString());
 				
 			}
+			*/
 		}
 		System.out.println( "well done" );
 		

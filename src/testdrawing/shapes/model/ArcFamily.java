@@ -4,133 +4,76 @@ import java.awt.Color;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Rectangle2D;
 
-public class ArcFamily extends Arc2D{
+public class ArcFamily {
+	private int x;
+	private int y;
+	private int radius;
+	private double startAngle;
+	private double endAngle;
+	private boolean anticlockwise; //1 - против часовой стрелки, 0 - по часововй стрелке
+	private String color;	
 	
-	private final int marge = 100; 
-	private double angleStart = -180;
-	private double angleExtent = 0;
-	private int typeArc = Arc2D.CHORD;
-	
-	private Point centre = new Point(0, 0);
-	private int begin;
-	private int end;
-	
-	private double x;
-	private double y;
-	private double width;
-	private double height;
-	private Color color = Color.BLUE ;
-	
-	public ArcFamily(double angleStart, int typeArc, Point centre) {
+	public ArcFamily() {
 		super();
-		this.angleStart = angleStart;
-		//this.typeArc = typeArc;
-		//this.centre = centre;
+		this.x = 0;
+		this.y = 0;
+		this.radius = 100;
+		this.startAngle = 0;
+		this.endAngle = (Math.PI/2);
+		this.anticlockwise = false;
+		this.color = "black";
 	}
-
-	/*public ArcFamily(int begin, int end) {
+	public ArcFamily(int x, int y, int radius, double startAngle, double endAngle, boolean anticlockwise, String color) {
 		super();
-		this.angleStart = angleStart;
-		//this.typeArc = typeArc;
-		//this.centre = centre;
-		this.x = centre.getX();
-		this.y = centre.getY();
-		this.width = marge + (end - begin);
-		this.height = width;
-		this.angleExtent = angleStart - (end - begin);		
-	}
-*/
-	public ArcFamily(int begin, int end, int typeArc, Color color) {
-		super();
-		this.angleStart = 0 - (2020 - end );
-		this.angleExtent = angleStart - 2*(end - begin);
-		
-		this.width = 5*( begin - 1800);
-		this.height = width;
-		this.x = 0-width/2;
-		this.y = x;		
+		this.x = x;
+		this.y = y;
+		this.radius = radius;
+		this.startAngle = startAngle;
+		this.endAngle = endAngle;
+		this.anticlockwise = anticlockwise;
 		this.color = color;
-		this.typeArc = 1;
 	}
-
-	
-
-	@Override
-	public String toString() {
-		return "ArcFamily [angleStart=" + angleStart + ", angleExtent=" + angleExtent + ", typeArc=" + typeArc + ", x="
-				+ x + ", y=" + y + ", width=" + width + ", height=" + height + ", color=" + color + "]";
+	public int getX() {
+		return x;
 	}
-
-	@Override
-	public double getAngleExtent() {
-		return angleStart-(end-begin);
+	public void setX(int x) {
+		this.x = x;
 	}
-
-	@Override
-	public double getAngleStart() {
-		return angleStart;
+	public int getY() {
+		return y;
 	}
-	
-	
-
-	@Override
-	protected Rectangle2D makeBounds(double arg0, double arg1, double arg2, double arg3) {
-		// TODO Auto-generated method stub
-		return null;
+	public void setY(int y) {
+		this.y = y;
 	}
-
-	@Override
-	public void setAngleExtent(double angleExtent) {
-		this.angleExtent = angleExtent;		
+	public int getRadius() {
+		return radius;
 	}
-
-	@Override
-	public void setAngleStart(double angleStart) {
-		this.angleStart = angleStart;
+	public void setRadius(int radius) {
+		this.radius = radius;
 	}
-
-	@Override
-	public void setArc(double x, double y, double height, double width, double angleStart, double angleExtent, int typeArc) {
-		//this.angleStart = angleStart;
-		//this.typeArc = typeArc;
-		//this.centre = new Point(x, y);
-		
-		//this.width = width;
-		//this.height = height;
-		//this.angleExtent = angleExtent;		
+	public double getStartAngle() {
+		return startAngle;
 	}
-
-	@Override
-	public double getHeight() {		
-		return height;
+	public void setStartAngle(double startAngle) {
+		this.startAngle = startAngle;
 	}
-
-	@Override
-	public double getWidth() {
-		return width;
+	public double getEndAngle() {
+		return endAngle;
 	}
-
-	@Override
-	public double getX() {
-		return centre.getX();
+	public void setEndAngle(double endAngle) {
+		this.endAngle = endAngle;
 	}
-
-	@Override
-	public double getY() {
-		return centre.getY();
+	public boolean isAnticlockwise() {
+		return anticlockwise;
 	}
-
-	@Override
-	public boolean isEmpty() {		
-		return false;
+	public void setAnticlockwise(boolean anticlockwise) {
+		this.anticlockwise = anticlockwise;
 	}
-
-	public Color getColor() {
+	public String getColor() {
 		return color;
 	}
-
-	public void setColor(Color color) {
+	public void setColor(String color) {
 		this.color = color;
 	}
-	
+
 }
